@@ -98,12 +98,6 @@ npx serve .
 open index.html
 ```
 
-### Default Login Credentials
-
-```
-Email: user@example.com
-Password: password123
-```
 
 Or create a new account through the signup page!
 
@@ -320,19 +314,5 @@ Modal.confirm('Title', 'Message', () => {
 This project is open source and available for personal and commercial use.
 
 ## 👨‍💻 Developer
+ Adesh Kumar (Full Stack Software Developer)
 
-Created with ❤️ as a portfolio project demonstrating modern frontend development skills.
-
-## 🙏 Acknowledgments
-
-- **Images**: Unsplash (https://unsplash.com)
-- **Icons**: Emoji icons for simplicity
-- **Inspiration**: Zomato, OpenTable, Airbnb
-
----
-
-## 📞 Support
-
-For questions or issues, please refer to the code comments or create an issue in the repository.
-
-**Happy Dining! 🍽️**
