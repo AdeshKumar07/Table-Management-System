@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FeastFinder - Premium Restaurant Reservations</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Landing Page Specific Styles */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to top, var(--light-bg), transparent);
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            animation: slideInLeft 1s ease-out 0.2s both;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-subtitle {
+            animation: slideInLeft 1s ease-out 0.4s both;
+        }
+
+        .hero-cta {
+            animation: slideInLeft 1s ease-out 0.6s both;
+        }
+
+        /* Featured Section */
+        .featured-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        /* Carousel */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            padding: 2rem 0;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+            gap: 2rem;
+        }
+
+        .carousel-item {
+            min-width: calc(33.333% - 1.5rem);
+            flex-shrink: 0;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .carousel-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            background: var(--light-surface);
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--glass-border);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .carousel-dot.active {
+            background: var(--primary-color);
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* Features Section */
+        .features-section {
+            background: var(--light-surface);
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--light-bg);
+            border-radius: var(--border-radius-lg);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: 30px 30px;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 30px); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            background: var(--light-surface);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 5rem;
+            color: var(--primary-color);
+            opacity: 0.2;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .testimonial-info h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .testimonial-info p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .carousel-item {
+                min-width: calc(100% - 2rem);
+            }
+
+            .stat-number {
+                font-size: 3rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carousel-item {
+                min-width: 100%;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader-wrapper">
+        <div class="loader">
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <div class="loader-text">FEAST</div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">🍽️ FeastFinder</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="restaurants.html">Restaurants</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#testimonials">Reviews</a></li>
+            </ul>
+            <div class="nav-right">
+                <button class="theme-toggle">
+                    <span>🌙</span>
+                </button>
+                <a href="login.html" class="btn btn-ghost">Login</a>
+                <a href="restaurants.html" class="btn btn-primary">Book Now</a>
+            </div>
+            <div class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="floating-foods">
+            <div class="food-icon" style="left: 10%; animation-delay: 0s;">🍕</div>
+            <div class="food-icon" style="left: 20%; animation-delay: 2s;">🍔</div>
+            <div class="food-icon" style="left: 30%; animation-delay: 4s;">🍣</div>
+            <div class="food-icon" style="left: 50%; animation-delay: 1s;">🍜</div>
+            <div class="food-icon" style="left: 70%; animation-delay: 3s;">🍝</div>
+            <div class="food-icon" style="left: 80%; animation-delay: 5s;">🥗</div>
+            <div class="food-icon" style="left: 90%; animation-delay: 2.5s;">🍰</div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Discover & Reserve<br>Extraordinary Dining</h1>
+                <p class="hero-subtitle">Experience the finest restaurants at your fingertips. Book your perfect table in seconds and embark on a culinary journey like no other.</p>
+                <div class="hero-cta">
+                    <a href="restaurants.html" class="btn btn-primary" style="background: white; color: var(--primary-color);">Explore Restaurants</a>
+                    <a href="#features" class="btn btn-ghost" style="border-color: white; color: white;">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Restaurants Section -->
+    <section class="section featured-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Featured Restaurants</h2>
+                <p>Handpicked dining experiences that promise unforgettable moments</p>
+            </div>
+            
+            <div class="carousel-container">
+                <div class="carousel" id="featuredCarousel">
+                    <!-- Carousel items will be inserted by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="carousel-controls">
+                <button class="carousel-btn" id="prevBtn">‹</button>
+                <button class="carousel-btn" id="nextBtn">›</button>
+            </div>
+            
+            <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section features-section" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose FeastFinder?</h2>
+                <p>We make dining reservations effortless and enjoyable</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Easy Discovery</h3>
+                    <p>Browse through hundreds of curated restaurants with detailed information, photos, and reviews.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Instant Booking</h3>
+                    <p>Reserve your table in seconds with our streamlined booking process. No phone calls needed.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💎</div>
+                    <h3>Premium Selection</h3>
+                    <p>Access exclusive restaurants and special dining experiences available only through our platform.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Book on the go with our fully responsive design that works perfectly on any device.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="500">0</div>
+                    <div class="stat-label">Partner Restaurants</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="50000">0</div>
+                    <div class="stat-label">Happy Customers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="100000">0</div>
+                    <div class="stat-label">Reservations Made</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="25">0</div>
+                    <div class="stat-label">Cities Covered</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section testimonials-section" id="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>What Our Users Say</h2>
+                <p>Join thousands of satisfied diners who trust FeastFinder</p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">FeastFinder made it so easy to discover new restaurants in my city. The booking process is seamless, and I love the instant confirmations!</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">SM</div>
+                        <div class="testimonial-info">
+                            <h4>Sarah Mitchell</h4>
+                            <p>Food Blogger</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">As a restaurant owner, FeastFinder has helped us reach more customers and manage reservations efficiently. Highly recommended!</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">JC</div>
+                        <div class="testimonial-info">
+                            <h4>James Chen</h4>
+                            <p>Restaurant Owner</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">The interface is beautiful and intuitive. I've tried many reservation apps, but FeastFinder is by far the best experience.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">EP</div>
+                        <div class="testimonial-info">
+                            <h4>Emily Parker</h4>
+                            <p>Tech Professional</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Start Your Culinary Journey?</h2>
+                <p style="max-width: 600px; margin: 0 auto 2rem;">Join FeastFinder today and discover amazing restaurants, make instant reservations, and create unforgettable dining experiences.</p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="restaurants.html" class="btn btn-primary">Browse Restaurants</a>
+                    <a href="login.html" class="btn btn-secondary">Create Account</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: var(--dark-bg); color: var(--text-light); padding: 3rem 0 1rem;">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <div>
+                    <h3 style="margin-bottom: 1rem;">🍽️ FeastFinder</h3>
+                    <p style="color: var(--text-muted);">Your premier destination for restaurant reservations. Discover, book, and enjoy extraordinary dining experiences.</p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 1rem;">Quick Links</h4>
+                    <ul style="list-style: none; color: var(--text-muted);">
+                        <li style="margin-bottom: 0.5rem;"><a href="restaurants.html" style="color: var(--text-muted);">Restaurants</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#features" style="color: var(--text-muted);">Features</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="login.html" style="color: var(--text-muted);">Login</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="dashboard.html" style="color: var(--text-muted);">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 1rem;">Support</h4>
+                    <ul style="list-style: none; color: var(--text-muted);">
+                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: var(--text-muted);">Help Center</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: var(--text-muted);">Contact Us</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: var(--text-muted);">Privacy Policy</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="#" style="color: var(--text-muted);">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 1rem;">Connect With Us</h4>
+                    <div style="display: flex; gap: 1rem; font-size: 1.5rem;">
+                        <a href="#" style="color: var(--text-muted);">📘</a>
+                        <a href="#" style="color: var(--text-muted);">📷</a>
+                        <a href="#" style="color: var(--text-muted);">🐦</a>
+                        <a href="#" style="color: var(--text-muted);">💼</a>
+                    </div>
+                </div>
+            </div>
+            <div style="border-top: 1px solid var(--glass-border); padding-top: 1rem; text-align: center; color: var(--text-muted);">
+                <p>&copy; 2024 FeastFinder. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script>
+        // Featured Restaurants Carousel
+        const restaurants = RestaurantData.getAll();
+        const carousel = document.getElementById('featuredCarousel');
+        const dotsContainer = document.getElementById('carouselDots');
+        let currentSlide = 0;
+        const itemsPerView = window.innerWidth > 768 ? 3 : window.innerWidth > 480 ? 2 : 1;
+        const totalSlides = Math.ceil(restaurants.length / itemsPerView);
+
+        // Populate carousel
+        restaurants.forEach(restaurant => {
+            const item = document.createElement('div');
+            item.className = 'carousel-item';
+            item.innerHTML = `
+                <div class="card restaurant-card">
+                    <div class="card-image">
+                        <img src="${restaurant.image}" alt="${restaurant.name}" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800'">
+                        <div class="card-badge">${restaurant.priceRange}</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">${restaurant.name}</h3>
+                        <div class="card-meta">
+                            <span class="rating">★ ${restaurant.rating}</span>
+                            <span>${restaurant.cuisine}</span>
+                        </div>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem;">📍 ${restaurant.location}</p>
+                        <a href="details.html?id=${restaurant.id}" class="btn btn-primary" style="width: 100%;">View Details</a>
+                    </div>
+                </div>
+            `;
+            carousel.appendChild(item);
+        });
+
+        // Create dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = `carousel-dot ${i === 0 ? 'active' : ''}`;
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        }
+
+        function updateCarousel() {
+            const itemWidth = carousel.querySelector('.carousel-item').offsetWidth;
+            const gap = 32; // 2rem gap
+            carousel.style.transform = `translateX(-${currentSlide * (itemWidth + gap) * itemsPerView}px)`;
+            
+            // Update dots
+            document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', nextSlide);
+        document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+        // Auto-slide
+        setInterval(nextSlide, 5000);
+
+        // Stats Counter Animation
+        const statNumbers = document.querySelectorAll('.stat-number');
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = parseInt(entry.target.getAttribute('data-target'));
+                    animateNumber(entry.target, target);
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        statNumbers.forEach(stat => statsObserver.observe(stat));
+
+        function animateNumber(element, target) {
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target.toLocaleString() + '+';
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 20);
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Update navbar auth state
+        document.addEventListener('DOMContentLoaded', () => {
+            const navRight = document.querySelector('.nav-right');
+            if (Auth.isLoggedIn()) {
+                const user = Auth.getCurrentUser();
+                navRight.innerHTML = `
+                    <button class="theme-toggle">
+                        <span>🌙</span>
+                    </button>
+                    <a href="dashboard.html" class="btn btn-ghost">Dashboard</a>
+                    <a href="#" class="btn btn-primary" onclick="Auth.logout(); return false;">Logout</a>
+                `;
+                UI.initThemeToggle();
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            updateCarousel();
+        });
+    </script>
+</body>
+</html>

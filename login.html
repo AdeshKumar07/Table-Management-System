@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FeastFinder</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Login Page Specific Styles */
+        body {
+            overflow: hidden;
+        }
+
+        .auth-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Left Side - Image/Branding */
+        .auth-left {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></svg>');
+            background-size: 50px 50px;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        .auth-branding {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .auth-branding h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .auth-branding p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .auth-features {
+            margin-top: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-feature {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            animation: slideInLeft 1s ease-out both;
+        }
+
+        .auth-feature:nth-child(1) { animation-delay: 0.3s; }
+        .auth-feature:nth-child(2) { animation-delay: 0.5s; }
+        .auth-feature:nth-child(3) { animation-delay: 0.7s; }
+
+        .auth-feature-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Right Side - Form */
+        .auth-right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            background: var(--light-bg);
+            position: relative;
+        }
+
+        .auth-right::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .auth-form-container {
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-header p {
+            color: var(--text-muted);
+        }
+
+        /* Tab Switcher */
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            background: var(--light-surface);
+            border-radius: var(--border-radius-lg);
+            padding: 0.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: var(--border-radius-md);
+            transition: all var(--transition-normal);
+        }
+
+        .auth-tab.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .auth-tab:hover:not(.active) {
+            color: var(--primary-color);
+        }
+
+        /* Form Styles */
+        .auth-form {
+            background: var(--light-surface);
+            padding: 2.5rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-group.floating {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.floating .form-input {
+            padding: 1.2rem 1rem 0.6rem;
+        }
+
+        .form-group.floating .floating-label {
+            top: 1.2rem;
+            left: 1rem;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: color var(--transition-fast);
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .form-error {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .form-group.error .form-input {
+            border-color: var(--danger);
+        }
+
+        .form-group.error .form-error {
+            display: block;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+        }
+
+        .forgot-password:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .auth-form .btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .auth-divider {
+            text-align: center;
+            position: relative;
+            margin: 1.5rem 0;
+        }
+
+        .auth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--glass-border);
+        }
+
+        .auth-divider span {
+            background: var(--light-surface);
+            padding: 0 1rem;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid var(--glass-border);
+            border-radius: var(--border-radius-md);
+            background: var(--light-surface);
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .auth-footer a {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Form Panels */
+        .form-panel {
+            display: none;
+        }
+
+        .form-panel.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Back to Home */
+        .back-home {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            z-index: 10;
+            transition: all var(--transition-normal);
+        }
+
+        .back-home:hover {
+            transform: translateX(-5px);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .auth-left {
+                display: none;
+            }
+
+            .auth-right {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-form {
+                padding: 1.5rem;
+            }
+
+            .auth-header h2 {
+                font-size: 2rem;
+            }
+
+            .social-login {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader-wrapper">
+        <div class="loader">
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <div class="loader-text">FEAST</div>
+        </div>
+    </div>
+
+    <div class="auth-container">
+        <!-- Left Side - Branding -->
+        <div class="auth-left">
+            <a href="index.html" class="back-home">← Back to Home</a>
+            <div class="auth-branding">
+                <h1>🍽️ FeastFinder</h1>
+                <p>Your gateway to extraordinary dining experiences</p>
+            </div>
+            <div class="auth-features">
+                <div class="auth-feature">
+                    <div class="auth-feature-icon">🔍</div>
+                    <div>
+                        <h4 style="margin: 0;">Discover</h4>
+                        <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Find the perfect restaurant</p>
+                    </div>
+                </div>
+                <div class="auth-feature">
+                    <div class="auth-feature-icon">⚡</div>
+                    <div>
+                        <h4 style="margin: 0;">Instant Booking</h4>
+                        <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Reserve in seconds</p>
+                    </div>
+                </div>
+                <div class="auth-feature">
+                    <div class="auth-feature-icon">💎</div>
+                    <div>
+                        <h4 style="margin: 0;">Premium Access</h4>
+                        <p style="margin: 0; font-size: 0.9rem; opacity: 0.9;">Exclusive dining experiences</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Form -->
+        <div class="auth-right">
+            <div class="auth-form-container">
+                <div class="auth-header">
+                    <h2>Welcome!</h2>
+                    <p>Sign in to continue to FeastFinder</p>
+                </div>
+
+                <!-- Tab Switcher -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Login</button>
+                    <button class="auth-tab" data-tab="signup">Sign Up</button>
+                </div>
+
+                <!-- Login Form -->
+                <div class="auth-form">
+                    <form id="loginForm" class="form-panel active">
+                        <div class="form-group floating">
+                            <input type="email" class="form-input" id="loginEmail" placeholder=" " required>
+                            <label class="floating-label" for="loginEmail">Email Address</label>
+                            <div class="form-error">Please enter a valid email address</div>
+                        </div>
+
+                        <div class="form-group floating">
+                            <input type="password" class="form-input" id="loginPassword" placeholder=" " required>
+                            <label class="floating-label" for="loginPassword">Password</label>
+                            <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">👁️</button>
+                            <div class="form-error">Password is required</div>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="rememberMe">
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" class="forgot-password">Forgot Password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Sign In</button>
+
+                        <div class="auth-divider">
+                            <span>or continue with</span>
+                        </div>
+
+                        <div class="social-login">
+                            <button type="button" class="social-btn">📘</button>
+                            <button type="button" class="social-btn">🐦</button>
+                            <button type="button" class="social-btn">📷</button>
+                        </div>
+
+                        <div class="auth-footer">
+                            <p>Don't have an account? <a href="#" onclick="switchTab('signup'); return false;">Sign Up</a></p>
+                        </div>
+                    </form>
+
+                    <!-- Signup Form -->
+                    <form id="signupForm" class="form-panel">
+                        <div class="form-group floating">
+                            <input type="text" class="form-input" id="signupName" placeholder=" " required>
+                            <label class="floating-label" for="signupName">Full Name</label>
+                            <div class="form-error">Name is required</div>
+                        </div>
+
+                        <div class="form-group floating">
+                            <input type="email" class="form-input" id="signupEmail" placeholder=" " required>
+                            <label class="floating-label" for="signupEmail">Email Address</label>
+                            <div class="form-error">Please enter a valid email address</div>
+                        </div>
+
+                        <div class="form-group floating">
+                            <input type="tel" class="form-input" id="signupPhone" placeholder=" " required>
+                            <label class="floating-label" for="signupPhone">Phone Number</label>
+                            <div class="form-error">Please enter a valid phone number</div>
+                        </div>
+
+                        <div class="form-group floating">
+                            <input type="password" class="form-input" id="signupPassword" placeholder=" " required>
+                            <label class="floating-label" for="signupPassword">Password</label>
+                            <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')">👁️</button>
+                            <div class="form-error">Password must be at least 6 characters</div>
+                        </div>
+
+                        <div class="form-group floating">
+                            <input type="password" class="form-input" id="signupConfirmPassword" placeholder=" " required>
+                            <label class="floating-label" for="signupConfirmPassword">Confirm Password</label>
+                            <button type="button" class="password-toggle" onclick="togglePassword('signupConfirmPassword')">👁️</button>
+                            <div class="form-error">Passwords do not match</div>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="agreeTerms" required>
+                                <span>I agree to the Terms & Conditions</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Create Account</button>
+
+                        <div class="auth-divider">
+                            <span>or continue with</span>
+                        </div>
+
+                        <div class="social-login">
+                            <button type="button" class="social-btn">📘</button>
+                            <button type="button" class="social-btn">🐦</button>
+                            <button type="button" class="social-btn">📷</button>
+                        </div>
+
+                        <div class="auth-footer">
+                            <p>Already have an account? <a href="#" onclick="switchTab('login'); return false;">Sign In</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script>
+        // Tab Switching
+        function switchTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+            // Update forms
+            document.querySelectorAll('.form-panel').forEach(f => f.classList.remove('active'));
+            document.getElementById(`${tab}Form`).classList.add('active');
+
+            // Clear errors
+            clearErrors();
+        }
+
+        // Tab click handlers
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                switchTab(tab.getAttribute('data-tab'));
+            });
+        });
+
+        // Toggle Password Visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.nextElementSibling.nextElementSibling;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+
+        // Clear all errors
+        function clearErrors() {
+            document.querySelectorAll('.form-group').forEach(group => {
+                group.classList.remove('error');
+            });
+        }
+
+        // Show error
+        function showError(inputId) {
+            const input = document.getElementById(inputId);
+            const formGroup = input.closest('.form-group');
+            formGroup.classList.add('error');
+        }
+
+        // Validate email
+        function validateEmail(email) {
+            return Validator.email(email);
+        }
+
+        // Login Form Handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors();
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            let isValid = true;
+
+            if (!validateEmail(email)) {
+                showError('loginEmail');
+                isValid = false;
+            }
+
+            if (!Validator.required(password)) {
+                showError('loginPassword');
+                isValid = false;
+            }
+
+            if (isValid) {
+                const result = Auth.login(email, password);
+                
+                if (result.success) {
+                    Toast.success('Login successful! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    Toast.error(result.message);
+                    showError('loginEmail');
+                    showError('loginPassword');
+                }
+            }
+        });
+
+        // Signup Form Handler
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors();
+
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const phone = document.getElementById('signupPhone').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+
+            let isValid = true;
+
+            if (!Validator.required(name)) {
+                showError('signupName');
+                isValid = false;
+            }
+
+            if (!validateEmail(email)) {
+                showError('signupEmail');
+                isValid = false;
+            }
+
+            if (!Validator.phone(phone)) {
+                showError('signupPhone');
+                isValid = false;
+            }
+
+            if (!Validator.password(password)) {
+                showError('signupPassword');
+                isValid = false;
+            }
+
+            if (password !== confirmPassword) {
+                showError('signupConfirmPassword');
+                isValid = false;
+            }
+
+            if (!agreeTerms) {
+                Toast.error('Please agree to the Terms & Conditions');
+                isValid = false;
+            }
+
+            if (isValid) {
+                const result = Auth.signup({
+                    name,
+                    email,
+                    phone,
+                    password
+                });
+
+                if (result.success) {
+                    Toast.success('Account created successfully! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    Toast.error(result.message);
+                    showError('signupEmail');
+                }
+            }
+        });
+
+        // Real-time validation
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('blur', function() {
+                const formGroup = this.closest('.form-group');
+                
+                if (this.value && !this.checkValidity()) {
+                    formGroup.classList.add('error');
+                } else {
+                    formGroup.classList.remove('error');
+                }
+            });
+
+            input.addEventListener('input', function() {
+                const formGroup = this.closest('.form-group');
+                formGroup.classList.remove('error');
+            });
+        });
+
+        // Check if already logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            if (Auth.isLoggedIn()) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>
